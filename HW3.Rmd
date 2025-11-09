@@ -1,0 +1,308 @@
+---
+title: "Анализ иммунных репертуаров, scRNA-seq"
+output:
+  html_document:
+    df_print: paged
+---
+Код и комментарии скопированы из этой vignette: https://immunomind.github.io/docs/tutorials/single_cell/.
+
+# 1. Скачивание необходимых пакетов для работы:
+```{r setup=FALSE, warning=FALSE}
+install.packages(c("immunarch", "Seurat", "BiocFileCache", "ggthemes", "ggsci", "tidyverse"))
+BiocManager::install("GEOquery")
+```
+
+```{r warning=FALSE}
+# Silence noisy startup messages while loading
+suppressPackageStartupMessages({
+  library(immunarch)
+  library(Seurat)
+  library(BiocFileCache)
+  library(ggplot2)
+  library(ggthemes)
+  library(ggsci)
+  library(GEOquery)
+  library(tidyverse)
+})
+
+theme_set(ggthemes::theme_few())
+
+# Keep a snapshot of versions for reproducibility (printed at the end as well)
+pkg_versions <- list(
+  immunarch = as.character(utils::packageVersion("immunarch")),
+  immundata = as.character(utils::packageVersion("immundata")),
+  Seurat    = as.character(utils::packageVersion("Seurat"))
+)
+```
+
+# 2. Скачивание метаданных из AIRR и самих данных из GEO.
+```{r warning=FALSE}
+
+getGEOSuppFiles('GSM4143665') # LT6 - tumor
+getGEOSuppFiles('GSM4143666') # LN6 - normal
+getGEOSuppFiles('GSM4143667') # LB6 - blood
+#download.file("https://github.com/immunomind/immundata/blob/main/inst/extdata/single_cell/metadata.tsv","metadata.tsv")
+
+# AIRR needed for code below
+#inp_files <- paste0(system.file("extdata/single_cell", "", package = "immundata"), "/*.csv.gz")
+inp_files <- Sys.glob("~/GSM*/*.csv.gz")
+inp_files
+#md_file <- system.file("extdata/single_cell", "metadata.tsv", package = "immundata")
+md_file <- data.frame(File = c(inp_files[1], inp_files[2], inp_files[3]),
+                      Tissue = c('Tumor', 'Normal', 'Blood'), 
+                      Prefix = c('LT6_', 'LN6_', 'LB6_'))
+md_table <- read_metadata(md_file)
+#schema <- make_receptor_schema(features = c("cdr3", "v_call"), chains = c("TRB"))
+# Single-chain with "cdr3" only
+#schema <- make_receptor_schema(features = c("cdr3"), chains = c("TRA"))
+# The most strict receptor definition
+schema <- make_receptor_schema(features = c("cdr3", "v_call", "j_call"), chains = c("TRA", "TRB"))
+#schema <- make_receptor_schema(features = c("cdr3", "v_call"), chains = c("TRB"))
+
+idata <- read_repertoires(path = inp_files, 
+                          schema = schema,
+                          metadata = md_table,
+                          barcode_col = "barcode", 
+                          locus_col = "locus",  # Mind that we use `locus` here because of column renaming
+                          umi_col = "umis",
+                          preprocess = make_default_preprocessing("10x"), 
+                          repertoire_schema = "Tissue")
+```
+
+# 3. Скачиваем информацию о клетках, баркодах из GEO-проекта.
+```{r warning=FALSE}
+download.file("https://ftp.ncbi.nlm.nih.gov/geo/series/GSE139nnn/GSE139555/suppl/GSE139555_tcell_metadata.txt.gz", "cells.tsv", quiet = T)
+cells <- read_tsv("cells.tsv")
+colnames(cells)[1] <- 'barcode' # в изначальном файле первый столбец без имени
+cells <- cells %>% filter(stringr::str_detect(barcode, 'LT6|LN6|LB6')) # нам нужны только данные шестого пациента
+head(cells)
+```
+
+# 4. Работа с Seurat
+```{r warning=FALSE}
+download.file('https://zenodo.org/records/15604205/files/l6data.rds?download=1', 'l6data.rds', quiet = T)
+mat <- read_rds('l6data.rds')
+sdata <- CreateSeuratObject(counts = mat)
+embeddings <- as.matrix(cells[c("UMAP_1", "UMAP_2")])
+rownames(embeddings) <- cells$barcode
+
+umap_dr <- CreateDimReducObject(embeddings = embeddings, key = "UMAP_", assay = DefaultAssay(sdata))
+sdata[["umap"]] <- umap_dr
+cells$ident[is.na(cells$ident)] <- "NA"
+Idents(sdata) <- setNames(cells$ident, cells$barcode)
+
+DimPlot(sdata, reduction = "umap", order = sort(unique(cells$ident), decreasing = TRUE), label = TRUE, alpha = .5)
+```
+
+# 5. Статистика:
+```{r warning=FALSE}
+idata_stats <- airr_stats_chains(idata)
+idata_stats
+
+p1 <- idata_stats |> vis(xval = "Tissue", yval = "n_receptors", fill = "Tissue", title = "No. barcodes per sample")
+p2 <- idata_stats |> vis(xval = "Tissue", yval = "n_receptors", fill = "Tissue", title = "No. receptors per sample")
+p1 + p2
+
+idata$repertoires
+# Build a tibble: cluster label per barcode (cell)
+annot <- tibble(Cluster = as.character(Idents(sdata)), barcode = names(Idents(sdata)))
+annot
+# Annotate ImmunData by barcode, then regroup repertoires by Tissue *and* Cluster
+idata <- annotate_barcodes(idata, annot, "barcode")
+idata <- agg_repertoires(idata, c("Tissue", "Cluster"))
+
+# Now each repertoire is a unique (Tissue, Cluster) pair
+idata$repertoires
+idata <- write_immundata(idata, "./immundata-files")
+
+idata_stats <- airr_stats_chains(idata)
+idata_stats
+# Barcodes and receptors per tissue, filled by cluster
+p1 <- idata_stats |> vis(xval = "Tissue", yval = "n_receptors", fill = "Cluster", title = "No. barcodes per sample")
+p2 <- idata_stats |> vis(xval = "Tissue", yval = "n_receptors", fill = "Cluster", title = "No. receptors per sample")
+p1 / p2
+
+idata_stats |> vis(xval = "Cluster", fill = "Tissue")
+
+idata_stats2 <- idata_stats |> mutate(.by = Tissue, TissueSize = sum(n_barcodes)) |> mutate(n_barcodes_div = n_barcodes / TissueSize)
+
+idata_stats2 |> vis(xval = "Cluster", y = "n_barcodes_div", fill = "Tissue", title = "No. barcodes per sample")
+
+gene_usage_full <- airr_stats_genes(
+  idata,
+  gene_col = "v_call",
+  level    = "receptor"
+)
+
+gene_usage_full |> vis(col = c("Cluster", "Tissue"))
+
+# Compute V gene usage for all repertoires (by receptor count, split by tissue if present)
+gene_usage_full <- airr_stats_genes(
+  idata,
+  gene_col = "v_call",
+  level    = "receptor"
+)
+
+top_n <- 10
+
+top_vgenes <- gene_usage_full |> 
+  group_by(Tissue, v_call) |> 
+  summarize(n = sum(n), .groups = "drop") |> 
+  group_by(Tissue) |> 
+  slice_max(order_by = n, n = top_n) |> 
+  ungroup()
+
+# Collect the *union* of all top genes across tissues
+top_gene_set <- unique(top_vgenes$v_call)
+
+# Filter to only these V genes for the heatmap (across all clusters and tissues)
+usage_focus <- gene_usage_full |> 
+  filter(v_call %in% top_gene_set)
+
+usage_focus |> vis(col = c("Cluster", "Tissue"))
+
+# We use special functions from duckdb to filter clusters of interest
+gene_usage_full <- idata |> 
+  filter_immundata(dd$regexp_matches(Cluster, "Treg|Trm")) |> 
+  airr_stats_genes(
+    gene_col = "v_call",
+    level    = "receptor"
+  )
+
+top_n <- 10
+
+top_vgenes <- gene_usage_full |> 
+  group_by(Tissue, v_call) |> 
+  summarize(n = sum(n), .groups = "drop") |> 
+  group_by(Tissue) |> 
+  slice_max(order_by = n, n = top_n) |> 
+  ungroup()
+
+# Collect the *union* of all top genes across tissues
+top_gene_set <- unique(top_vgenes$v_call)
+
+# Filter to only these V genes for the heatmap (across all clusters and tissues)
+usage_focus <- gene_usage_full |> 
+  filter(v_call %in% top_gene_set)
+
+usage_focus |> vis(col = c("Cluster", "Tissue"))
+
+# Compute CDR3 length stats for all repertoires (default is cdr3_aa)
+length_stats <- airr_stats_lengths(
+  idata,
+  seq_col = "cdr3"
+)
+
+# Plot: density of CDR3 lengths by tissue
+ggplot(length_stats, aes(x = seq_len, y = pct, color = Tissue)) +
+  geom_line(stat = "identity", linewidth = 1.2) +
+  facet_wrap(~ Tissue, scales = "free_y") +
+  ggtitle("CDR3 length distribution by tissue") +
+  xlab("CDR3 length (amino acids)") +
+  ylab("% receptors") +
+  ggsci::scale_color_locuszoom()
+
+# Choose clusters to display
+selected_clusters <- c("Trm", "Treg")
+
+length_stats_sel <- length_stats %>%
+  filter(grepl("Trm|Treg", Cluster))
+
+ggplot(length_stats_sel, aes(x = seq_len, y = pct, color = Tissue)) +
+  geom_line(stat = "identity", linewidth = 1.2) +
+  facet_wrap(~ Cluster, scales = "free_y") +
+  ggtitle("CDR3 length distribution in Trm and Treg clusters") +
+  xlab("CDR3 length (amino acids)") +
+  ylab("% receptors") +
+  ggsci::scale_color_locuszoom()
+
+# Compute the abundance (cell/UMI count) for top 1000 clones per repertoire
+clonal_line <- airr_clonality_line(
+  idata,
+  limit = 1000
+)
+
+# Plot: each line is a sample, colored by tissue
+ggplot(clonal_line, aes(x = index, y = imd_count, color = Tissue, group = imd_repertoire_id)) +
+  geom_line(alpha = 0.7) +
+  scale_x_log10() +
+  scale_y_log10() +
+  ggtitle("Rank–abundance: Top 1000 clones per repertoire") +
+  xlab("Clone rank (1 = most abundant)") +
+  ylab("Cell count (log10 scale)") +
+  ggsci::scale_color_locuszoom()
+
+clonal_prop <- airr_clonality_prop(idata)
+
+# Plot: what fraction of the repertoire falls into each clonal bin
+ggplot(clonal_prop, aes(x = Tissue, y = occupied_prop, fill = clonal_prop_bin)) +
+  geom_col(position = "fill") +
+  ggtitle("Fraction of repertoire: hyperexpanded, large, rare clones") +
+  ylab("Fraction of cells") +
+  xlab("Tissue") +
+  ggsci::scale_fill_locuszoom() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1))
+
+clonal_rank <- airr_clonality_rank(
+  idata,
+  bins = c(10, 100, 1000)
+)
+
+ggplot(clonal_rank, aes(x = Tissue, y = occupied_prop, fill = as.factor(clonal_rank_bin))) +
+  geom_col(position = "fill") +
+  ggtitle("Fraction of repertoire: top-10, top-100, top-1000") +
+  ylab("Fraction of cells") +
+  xlab("Tissue") +
+  ggsci::scale_fill_locuszoom() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1))
+```
+
+```{r warning=FALSE}
+# 1. Coverage diversity — D50: how many clones cover 50% of the repertoire?
+d50 <- airr_diversity_dxx(idata, perc = 50)
+p1 <- d50 |> vis()
+
+# 3. Chao1 — non-parametric estimator of species richness (number of unique receptors)
+chao <- airr_diversity_chao1(idata)
+p2 <- chao |> vis(fill = "Tissue")
+
+# 3. Shannon entropy — classical diversity (higher = more even)
+shannon <- airr_diversity_shannon(idata)
+p3 <- shannon |> vis(xval = "Cluster")
+
+# 4. Pielou's evenness (normalized entropy, 0 = dominated, 1 = perfectly even)
+pielou <- airr_diversity_pielou(idata)
+p4 <- pielou |> vis(xval = "Tissue")
+p5 <- pielou |> vis(facet = "Tissue", fill = "Cluster", dir = "v")
+
+# 5. Hill number (q=1): the “effective number of clones”
+hill1 <- airr_diversity_index(idata)
+
+# 6. Hill diversity profile (q=0, 1, 2, ...)
+hill_profile <- airr_diversity_hill(idata, q = c(0, 1, 2))
+
+p1
+p2
+p3
+p4
+p5
+```
+
+```{r warning=FALSE}
+# 1. Count of shared receptors: intersection matrix
+m_pub <- airr_public_intersection(idata)
+m_pub %>% vis()
+# 2. Jaccard similarity: size-normalized matrix
+m_jac <- airr_public_jaccard(idata)
+m_jac %>% vis()
+
+idata_prop <- annotate_clonality_prop(idata)
+sdata_prop <- annotate_seurat(idata_prop, sdata, cols = "clonal_prop_bin")
+sdata_prop@meta.data$clonal_prop_bin[is.na(sdata_prop@meta.data$clonal_prop_bin)] <- "NA"
+Seurat::DimPlot(sdata_prop, reduction = "umap", group.by = "clonal_prop_bin", shuffle = TRUE)
+
+idata_rank <- annotate_clonality_rank(idata)
+sdata_rank <- annotate_seurat(idata_rank, sdata, cols = "clonal_rank_bin")
+sdata_rank@meta.data$clonal_rank_bin[is.na(sdata_rank@meta.data$clonal_rank_bin)] <- "NA"
+Seurat::DimPlot(sdata_rank, reduction = "umap", group.by = "clonal_rank_bin", shuffle = TRUE)
+```
