@@ -1,0 +1,312 @@
+Parker_B_scale_epitope_find
+Use Parker's propensity scale, takes an antigen block as input,
+and creates a list of residues that are possible epitopes.
+
+
+----------------------------------
+Antigen sequence (file: /opt/lampp/htdocs/C-IMMSIM/Jobs/input/43044_20251214-070025_5_bqiSbAJAVGmm.FSA_1_001)
+----------------------------------
+
+
+GIINTLQKYYCRVRGGRCAVLSCLPKEEQIGKCSTRGRKCCRRKKAYYYQSFSFWFLAYYMLLNVQTLIAYYVLYDEFVT
+IAYYILSDENYLLGPGPGAYYISLNSMYTRGPGPGIAGAKSKFPRSMLSIGPGPGVIAGAKSKFPRSMLSGPGPGYFLDP
+NNEVMPLIINGPGPGIFRQGSSPILCIFETKKPSFVRLDTTETNIVNSVLQTGDGK
+
+00000000000000000000000000011110011111111100000000000000000000000000000000000000
+00000000000000000000000000000001000000000000000000000000000000000000000010000000
+01000000000000000000000000000000000000011100000000001111
+Epitopes of protein 0 ------------
+1]	pos=27 len=4	EQIG
+2]	pos=33 len=9	STRGRKCCR
+3]	pos=212 len=4	GDGK
+
+
+----------------------------------
+Antigen sequence (file: /opt/lampp/htdocs/C-IMMSIM/Jobs/input/43044_20251214-070025_5_bqiSbAJAVGmm.FSA_1_002)
+----------------------------------
+
+
+GIINTLQKYYCRVRGGRCAVLSCLPKEEQIGKCSTRGRKCCRRKKAYYIIITSYLQKAYYYLAKILCLKGPGPGLLQRGR
+LPLVSEFSDGPGPGLQRGRLPLVSEFSDEKKIILFQNNDINAQQFANVISKIYTLIYRQLTSNVDVGCLLTDTIESTKTK
+ISIEKIKQTGINNVQSLIKFISDNKKEYKTIISEEYLSKEDRIITILQNIVNEHDIKYDNKLLNMRDLIVTFRERYS
+
+00000000000000000000000000011110011111111100000000000000000000000000000000000000
+00000001101000000000000001110000000000111000000000000000000000010000000001111110
+00000010010000000000000111100000000001000000000000000001010000000000000000011
+Epitopes of protein 1 ------------
+1]	pos=27 len=4	EQIG
+2]	pos=33 len=9	STRGRKCCR
+3]	pos=153 len=6	IESTKT
+4]	pos=183 len=4	NKKE
+
+DoPeptideList_I:
+	Given the antigen injected creates the list of peptides for all the
+	NumAgProts proteins and for all (i.e., 4) MHCI molecules
+
+	Read class I peptide list from file? NO
+
+=========================================================================
+
+Allele: A0201
+Pseudo sequence: KAAHVEQRKAQTRTV
+Threshold: 9.523800
+Max score: 27.437000
+
+
+----------------------------------
+Antigen sequence (file: /opt/lampp/htdocs/C-IMMSIM/Jobs/input/43044_20251214-070025_5_bqiSbAJAVGmm.FSA_1_001)
+----------------------------------
+
+GIINTLQKYYCRVRGGRCAVLSCLPKEEQIGKCSTRGRKCCRRKKAYYYQSFSFWFLAYYMLLNVQTLIAYYVLYDEFVT
+IAYYILSDENYLLGPGPGAYYISLNSMYTRGPGPGIAGAKSKFPRSMLSIGPGPGVIAGAKSKFPRSMLSGPGPGYFLDP
+NNEVMPLIINGPGPGIFRQGSSPILCIFETKKPSFVRLDTTETNIVNSVLQTGDGK
+
+Epitopes of protein 0 ------------
+0]	pos=  48 score=0.018963 (unnormalised=2.1192000000)	YQSFSFWFL
+1]	pos=  60 score=0.012440 (unnormalised=1.3902000000)	MLLNVQTLI
+2]	pos=  72 score=0.006928 (unnormalised=0.7742000000)	VLYDEFVTI
+3]	pos=  84 score=0.006838 (unnormalised=0.7642000000)	ILSDENYLL
+4]	pos=  90 score=0.016708 (unnormalised=1.8672000000)	YLLGPGPGA
+5]	pos=  -1 score=0.938124 (unnormalised=104.8410000000)	non-binding event
+
+
+----------------------------------
+Antigen sequence (file: /opt/lampp/htdocs/C-IMMSIM/Jobs/input/43044_20251214-070025_5_bqiSbAJAVGmm.FSA_1_002)
+----------------------------------
+
+GIINTLQKYYCRVRGGRCAVLSCLPKEEQIGKCSTRGRKCCRRKKAYYIIITSYLQKAYYYLAKILCLKGPGPGLLQRGR
+LPLVSEFSDGPGPGLQRGRLPLVSEFSDEKKIILFQNNDINAQQFANVISKIYTLIYRQLTSNVDVGCLLTDTIESTKTK
+ISIEKIKQTGINNVQSLIKFISDNKKEYKTIISEEYLSKEDRIITILQNIVNEHDIKYDNKLLNMRDLIVTFRERYS
+
+Epitopes of protein 1 ------------
+0]	pos=  53 score=0.043842 (unnormalised=4.8072000000)	YLQKAYYYL
+1]	pos=  -1 score=0.956158 (unnormalised=104.8410000000)	non-binding event
+
+=========================================================================
+
+Allele: A0301
+Pseudo sequence: KAAHVEQRKAQTRRV
+Threshold: 8.185000
+Max score: 23.064000
+
+
+----------------------------------
+Antigen sequence (file: /opt/lampp/htdocs/C-IMMSIM/Jobs/input/43044_20251214-070025_5_bqiSbAJAVGmm.FSA_1_001)
+----------------------------------
+
+GIINTLQKYYCRVRGGRCAVLSCLPKEEQIGKCSTRGRKCCRRKKAYYYQSFSFWFLAYYMLLNVQTLIAYYVLYDEFVT
+IAYYILSDENYLLGPGPGAYYISLNSMYTRGPGPGIAGAKSKFPRSMLSIGPGPGVIAGAKSKFPRSMLSGPGPGYFLDP
+NNEVMPLIINGPGPGIFRQGSSPILCIFETKKPSFVRLDTTETNIVNSVLQTGDGK
+
+Epitopes of protein 0 ------------
+0]	pos=   1 score=0.001020 (unnormalised=0.1070000000)	IINTLQKYY
+1]	pos=  -1 score=0.998980 (unnormalised=104.8410000000)	non-binding event
+
+
+----------------------------------
+Antigen sequence (file: /opt/lampp/htdocs/C-IMMSIM/Jobs/input/43044_20251214-070025_5_bqiSbAJAVGmm.FSA_1_002)
+----------------------------------
+
+GIINTLQKYYCRVRGGRCAVLSCLPKEEQIGKCSTRGRKCCRRKKAYYIIITSYLQKAYYYLAKILCLKGPGPGLLQRGR
+LPLVSEFSDGPGPGLQRGRLPLVSEFSDEKKIILFQNNDINAQQFANVISKIYTLIYRQLTSNVDVGCLLTDTIESTKTK
+ISIEKIKQTGINNVQSLIKFISDNKKEYKTIISEEYLSKEDRIITILQNIVNEHDIKYDNKLLNMRDLIVTFRERYS
+
+Epitopes of protein 1 ------------
+0]	pos=   1 score=0.000911 (unnormalised=0.1070000000)	IINTLQKYY
+1]	pos=  48 score=0.038857 (unnormalised=4.5620000000)	IIITSYLQK
+2]	pos=  60 score=0.002087 (unnormalised=0.2450000000)	YLAKILCLK
+3]	pos= 101 score=0.007972 (unnormalised=0.9360000000)	LVSEFSDEK
+4]	pos= 122 score=0.010545 (unnormalised=1.2380000000)	QQFANVISK
+5]	pos= 176 score=0.002121 (unnormalised=0.2490000000)	LIKFISDNK
+6]	pos= 190 score=0.044529 (unnormalised=5.2280000000)	IISEEYLSK
+7]	pos=  -1 score=0.892978 (unnormalised=104.8410000000)	non-binding event
+
+=========================================================================
+
+Allele: B0702
+Pseudo sequence: KAAREEQQIKAQTRE
+Threshold: 8.702800
+Max score: 28.406000
+
+
+----------------------------------
+Antigen sequence (file: /opt/lampp/htdocs/C-IMMSIM/Jobs/input/43044_20251214-070025_5_bqiSbAJAVGmm.FSA_1_001)
+----------------------------------
+
+GIINTLQKYYCRVRGGRCAVLSCLPKEEQIGKCSTRGRKCCRRKKAYYYQSFSFWFLAYYMLLNVQTLIAYYVLYDEFVT
+IAYYILSDENYLLGPGPGAYYISLNSMYTRGPGPGIAGAKSKFPRSMLSIGPGPGVIAGAKSKFPRSMLSGPGPGYFLDP
+NNEVMPLIINGPGPGIFRQGSSPILCIFETKKPSFVRLDTTETNIVNSVLQTGDGK
+
+Epitopes of protein 0 ------------
+0]	pos=  -1 score=1.000000 (unnormalised=104.8410000000)	non-binding event
+
+
+----------------------------------
+Antigen sequence (file: /opt/lampp/htdocs/C-IMMSIM/Jobs/input/43044_20251214-070025_5_bqiSbAJAVGmm.FSA_1_002)
+----------------------------------
+
+GIINTLQKYYCRVRGGRCAVLSCLPKEEQIGKCSTRGRKCCRRKKAYYIIITSYLQKAYYYLAKILCLKGPGPGLLQRGR
+LPLVSEFSDGPGPGLQRGRLPLVSEFSDEKKIILFQNNDINAQQFANVISKIYTLIYRQLTSNVDVGCLLTDTIESTKTK
+ISIEKIKQTGINNVQSLIKFISDNKKEYKTIISEEYLSKEDRIITILQNIVNEHDIKYDNKLLNMRDLIVTFRERYS
+
+Epitopes of protein 1 ------------
+0]	pos=  91 score=0.007302 (unnormalised=0.7712000000)	GPGLQRGRL
+1]	pos=  -1 score=0.992698 (unnormalised=104.8410000000)	non-binding event
+
+=========================================================================
+
+Allele: B3501
+Pseudo sequence: KAARVEQQIKAQTRE
+Threshold: 9.376400
+Max score: 27.550000
+
+
+----------------------------------
+Antigen sequence (file: /opt/lampp/htdocs/C-IMMSIM/Jobs/input/43044_20251214-070025_5_bqiSbAJAVGmm.FSA_1_001)
+----------------------------------
+
+GIINTLQKYYCRVRGGRCAVLSCLPKEEQIGKCSTRGRKCCRRKKAYYYQSFSFWFLAYYMLLNVQTLIAYYVLYDEFVT
+IAYYILSDENYLLGPGPGAYYISLNSMYTRGPGPGIAGAKSKFPRSMLSIGPGPGVIAGAKSKFPRSMLSGPGPGYFLDP
+NNEVMPLIINGPGPGIFRQGSSPILCIFETKKPSFVRLDTTETNIVNSVLQTGDGK
+
+Epitopes of protein 0 ------------
+0]	pos=  51 score=0.018026 (unnormalised=1.9246000000)	FSFWFLAYY
+1]	pos=  -1 score=0.981974 (unnormalised=104.8410000000)	non-binding event
+
+
+----------------------------------
+Antigen sequence (file: /opt/lampp/htdocs/C-IMMSIM/Jobs/input/43044_20251214-070025_5_bqiSbAJAVGmm.FSA_1_002)
+----------------------------------
+
+GIINTLQKYYCRVRGGRCAVLSCLPKEEQIGKCSTRGRKCCRRKKAYYIIITSYLQKAYYYLAKILCLKGPGPGLLQRGR
+LPLVSEFSDGPGPGLQRGRLPLVSEFSDEKKIILFQNNDINAQQFANVISKIYTLIYRQLTSNVDVGCLLTDTIESTKTK
+ISIEKIKQTGINNVQSLIKFISDNKKEYKTIISEEYLSKEDRIITILQNIVNEHDIKYDNKLLNMRDLIVTFRERYS
+
+Epitopes of protein 1 ------------
+0]	pos= 124 score=0.009313 (unnormalised=0.9856000000)	FANVISKIY
+1]	pos=  -1 score=0.990687 (unnormalised=104.8410000000)	non-binding event
+
+DoPeptideList_II:
+	Given the antigen injected creates the list of peptides for all the
+	NumAgProts proteins and for all (i.e., 2) MHCII molecules
+
+	Read class II peptide list from file? NO
+
+=========================================================================
+
+Allele: DRB1_0301
+Pseudo sequence: RVTLGRDAYW
+Threshold: 2.237910
+Max score: 30.179000
+
+
+----------------------------------
+Antigen sequence (file: /opt/lampp/htdocs/C-IMMSIM/Jobs/input/43044_20251214-070025_5_bqiSbAJAVGmm.FSA_1_001)
+----------------------------------
+
+GIINTLQKYYCRVRGGRCAVLSCLPKEEQIGKCSTRGRKCCRRKKAYYYQSFSFWFLAYYMLLNVQTLIAYYVLYDEFVT
+IAYYILSDENYLLGPGPGAYYISLNSMYTRGPGPGIAGAKSKFPRSMLSIGPGPGVIAGAKSKFPRSMLSGPGPGYFLDP
+NNEVMPLIINGPGPGIFRQGSSPILCIFETKKPSFVRLDTTETNIVNSVLQTGDGK
+
+Epitopes of protein 0 ------------
+0]	pos=   1 score=0.014606 (unnormalised=1.5140900000)	IINTLQKYY
+1]	pos=  60 score=0.035357 (unnormalised=3.6650900000)	MLLNVQTLI
+2]	pos=  62 score=0.005480 (unnormalised=0.5680900000)	LNVQTLIAY
+3]	pos=  72 score=0.021639 (unnormalised=2.2430900000)	VLYDEFVTI
+4]	pos=  83 score=0.019999 (unnormalised=2.0730900000)	YILSDENYL
+5]	pos=  84 score=0.098235 (unnormalised=10.1830900000)	ILSDENYLL
+6]	pos=  99 score=0.073665 (unnormalised=7.6360900000)	YYISLNSMY
+7]	pos= 100 score=0.005625 (unnormalised=0.5830900000)	YISLNSMYT
+8]	pos= 101 score=0.012561 (unnormalised=1.3020900000)	ISLNSMYTR
+9]	pos= 147 score=0.001969 (unnormalised=0.2040900000)	MLSGPGPGY
+10]	pos= 155 score=0.031585 (unnormalised=3.2740900000)	YFLDPNNEV
+11]	pos= 186 score=0.019439 (unnormalised=2.0150900000)	IFETKKPSF
+12]	pos= 195 score=0.021523 (unnormalised=2.2310900000)	VRLDTTETN
+13]	pos=  -1 score=0.638317 (unnormalised=66.1680000000)	non-binding event
+
+
+----------------------------------
+Antigen sequence (file: /opt/lampp/htdocs/C-IMMSIM/Jobs/input/43044_20251214-070025_5_bqiSbAJAVGmm.FSA_1_002)
+----------------------------------
+
+GIINTLQKYYCRVRGGRCAVLSCLPKEEQIGKCSTRGRKCCRRKKAYYIIITSYLQKAYYYLAKILCLKGPGPGLLQRGR
+LPLVSEFSDGPGPGLQRGRLPLVSEFSDEKKIILFQNNDINAQQFANVISKIYTLIYRQLTSNVDVGCLLTDTIESTKTK
+ISIEKIKQTGINNVQSLIKFISDNKKEYKTIISEEYLSKEDRIITILQNIVNEHDIKYDNKLLNMRDLIVTFRERYS
+
+Epitopes of protein 1 ------------
+0]	pos=   1 score=0.011164 (unnormalised=1.5140900000)	IINTLQKYY
+1]	pos=  48 score=0.000133 (unnormalised=0.0180900000)	IIITSYLQK
+2]	pos=  49 score=0.048635 (unnormalised=6.5960900000)	IITSYLQKA
+3]	pos=  74 score=0.029206 (unnormalised=3.9610900000)	LLQRGRLPL
+4]	pos=  75 score=0.003776 (unnormalised=0.5120900000)	LQRGRLPLV
+5]	pos=  94 score=0.003776 (unnormalised=0.5120900000)	LQRGRLPLV
+6]	pos= 101 score=0.014416 (unnormalised=1.9550900000)	LVSEFSDEK
+7]	pos= 148 score=0.043555 (unnormalised=5.9070900000)	LLTDTIEST
+8]	pos= 152 score=0.001910 (unnormalised=0.2590900000)	TIESTKTKI
+9]	pos= 179 score=0.101303 (unnormalised=13.7390900000)	FISDNKKEY
+10]	pos= 190 score=0.015205 (unnormalised=2.0620900000)	IISEEYLSK
+11]	pos= 196 score=0.007507 (unnormalised=1.0180900000)	LSKEDRIIT
+12]	pos= 205 score=0.020867 (unnormalised=2.8300900000)	ILQNIVNEH
+13]	pos= 209 score=0.035761 (unnormalised=4.8500900000)	IVNEHDIKY
+14]	pos= 215 score=0.104245 (unnormalised=14.1380900000)	IKYDNKLLN
+15]	pos= 217 score=0.000686 (unnormalised=0.0930900000)	YDNKLLNMR
+16]	pos= 221 score=0.000952 (unnormalised=0.1290900000)	LLNMRDLIV
+17]	pos= 227 score=0.069023 (unnormalised=9.3610900000)	LIVTFRERY
+18]	pos=  -1 score=0.487880 (unnormalised=66.1680000000)	non-binding event
+
+=========================================================================
+
+Allele: DRB1_1501
+Pseudo sequence: RVTLGRDASW
+Threshold: 3.125180
+Max score: 28.118000
+
+
+----------------------------------
+Antigen sequence (file: /opt/lampp/htdocs/C-IMMSIM/Jobs/input/43044_20251214-070025_5_bqiSbAJAVGmm.FSA_1_001)
+----------------------------------
+
+GIINTLQKYYCRVRGGRCAVLSCLPKEEQIGKCSTRGRKCCRRKKAYYYQSFSFWFLAYYMLLNVQTLIAYYVLYDEFVT
+IAYYILSDENYLLGPGPGAYYISLNSMYTRGPGPGIAGAKSKFPRSMLSIGPGPGVIAGAKSKFPRSMLSGPGPGYFLDP
+NNEVMPLIINGPGPGIFRQGSSPILCIFETKKPSFVRLDTTETNIVNSVLQTGDGK
+
+Epitopes of protein 0 ------------
+0]	pos=   5 score=0.005722 (unnormalised=0.5428200000)	LQKYYCRVR
+1]	pos=  45 score=0.008473 (unnormalised=0.8038200000)	AYYYQSFSF
+2]	pos=  55 score=0.006555 (unnormalised=0.6218200000)	FLAYYMLLN
+3]	pos=  56 score=0.031865 (unnormalised=3.0228200000)	LAYYMLLNV
+4]	pos=  58 score=0.025530 (unnormalised=2.4218200000)	YYMLLNVQT
+5]	pos=  64 score=0.055942 (unnormalised=5.3068200000)	VQTLIAYYV
+6]	pos= 100 score=0.060464 (unnormalised=5.7358200000)	YISLNSMYT
+7]	pos= 101 score=0.014377 (unnormalised=1.3638200000)	ISLNSMYTR
+8]	pos= 127 score=0.025909 (unnormalised=2.4578200000)	LSIGPGPGV
+9]	pos= 175 score=0.028745 (unnormalised=2.7268200000)	IFRQGSSPI
+10]	pos= 176 score=0.038907 (unnormalised=3.6908200000)	FRQGSSPIL
+11]	pos=  -1 score=0.697511 (unnormalised=66.1680000000)	non-binding event
+
+
+----------------------------------
+Antigen sequence (file: /opt/lampp/htdocs/C-IMMSIM/Jobs/input/43044_20251214-070025_5_bqiSbAJAVGmm.FSA_1_002)
+----------------------------------
+
+GIINTLQKYYCRVRGGRCAVLSCLPKEEQIGKCSTRGRKCCRRKKAYYIIITSYLQKAYYYLAKILCLKGPGPGLLQRGR
+LPLVSEFSDGPGPGLQRGRLPLVSEFSDEKKIILFQNNDINAQQFANVISKIYTLIYRQLTSNVDVGCLLTDTIESTKTK
+ISIEKIKQTGINNVQSLIKFISDNKKEYKTIISEEYLSKEDRIITILQNIVNEHDIKYDNKLLNMRDLIVTFRERYS
+
+Epitopes of protein 1 ------------
+0]	pos=   5 score=0.004629 (unnormalised=0.5428200000)	LQKYYCRVR
+1]	pos=  40 score=0.003981 (unnormalised=0.4668200000)	CRRKKAYYI
+2]	pos=  46 score=0.022026 (unnormalised=2.5828200000)	YYIIITSYL
+3]	pos=  47 score=0.045930 (unnormalised=5.3858200000)	YIIITSYLQ
+4]	pos=  75 score=0.043048 (unnormalised=5.0478200000)	LQRGRLPLV
+5]	pos=  94 score=0.043048 (unnormalised=5.0478200000)	LQRGRLPLV
+6]	pos= 111 score=0.053691 (unnormalised=6.2958200000)	IILFQNNDI
+7]	pos= 121 score=0.017353 (unnormalised=2.0348200000)	AQQFANVIS
+8]	pos= 135 score=0.009686 (unnormalised=1.1358200000)	IYRQLTSNV
+9]	pos= 136 score=0.011682 (unnormalised=1.3698200000)	YRQLTSNVD
+10]	pos= 170 score=0.028115 (unnormalised=3.2968200000)	INNVQSLIK
+11]	pos= 176 score=0.012057 (unnormalised=1.4138200000)	LIKFISDNK
+12]	pos= 177 score=0.020167 (unnormalised=2.3648200000)	IKFISDNKK
+13]	pos= 203 score=0.108987 (unnormalised=12.7798200000)	ITILQNIVN
+14]	pos= 221 score=0.011315 (unnormalised=1.3268200000)	LLNMRDLIV
+15]	pos=  -1 score=0.564283 (unnormalised=66.1680000000)	non-binding event
